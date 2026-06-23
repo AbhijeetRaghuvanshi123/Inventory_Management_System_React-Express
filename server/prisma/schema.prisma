@@ -1,0 +1,85 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+enum OrderStatus {
+  PLACED
+  CANCELLED
+}
+
+enum StockMovementType {
+  STOCK_IN
+  ORDER_PLACED
+  ORDER_CANCELLED
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+
+  orders    Order[]
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  sku         String   @unique
+  name        String
+  stock       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  orderItems  OrderItem[]
+  movements   StockMovement[]
+}
+
+model Order {
+  id          String      @id @default(uuid())
+  status      OrderStatus @default(PLACED)
+  createdAt   DateTime    @default(now())
+
+  userId      String
+  user        User        @relation(fields: [userId], references: [id])
+
+  items       OrderItem[]
+}
+
+model OrderItem {
+  id          String   @id @default(uuid())
+
+  orderId     String
+  productId   String
+
+  quantity    Int
+
+  order       Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product     Product   @relation(fields: [productId], references: [id])
+
+  @@unique([orderId, productId])
+}
+
+model StockMovement {
+  id          String             @id @default(uuid())
+
+  productId   String
+  product     Product            @relation(fields: [productId], references: [id])
+
+  type        StockMovementType
+  quantity    Int
+
+  stockAfter  Int
+
+  createdAt   DateTime           @default(now())
+}
