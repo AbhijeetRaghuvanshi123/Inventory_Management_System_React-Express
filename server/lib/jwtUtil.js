@@ -9,7 +9,7 @@ const genToken = (id, email, privateKey) => {
         privateKey,
         {
             algorithm: "RS256",
-            expiresIn: '1d'
+            expiresIn: process.env.JWT_EXPIRES_IN
         }
     )
 }

@@ -18,17 +18,11 @@ const registerUserPOST = async (req, res) => {
 const loginUserPOST = async (req, res) => {
     const { email, password } = req.body;
 
-    console.log("REQ BODY:", req.body);
-    console.log("PASSWORD:", req.body?.password);
-
     const user = await userQuery.getUserByEmail(email);
 
     if (!user) {
         throw new Error('Invalid Credentials');
     }
-
-    console.log("USER:", user);
-    console.log("USER PASSWORD:", user?.password);
 
     const valid = await validPassword(password, user.password);
 

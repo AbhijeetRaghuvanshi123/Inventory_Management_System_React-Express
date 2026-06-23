@@ -2,7 +2,7 @@
 CREATE TYPE "OrderStatus" AS ENUM ('PLACED', 'CANCELLED');
 
 -- CreateEnum
-CREATE TYPE "StockMovementType" AS ENUM ('STOCK_IN', 'ORDER_PLACED', 'ORDER_CANCELLED');
+CREATE TYPE "StockMovementType" AS ENUM ('STOCK_IN', 'STOCK_OUT', 'ORDER_PLACED', 'ORDER_CANCELLED');
 
 -- CreateTable
 CREATE TABLE "User" (

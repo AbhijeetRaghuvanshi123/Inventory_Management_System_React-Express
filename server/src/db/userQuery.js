@@ -21,14 +21,12 @@ const getUserByEmail = async (email) => {
 }
 
 const addUser = async (hashedPassword, email) => {
-    const user = await prisma.user.create({
+    return await prisma.user.create({
         data: {
             email,
             password: hashedPassword
         }
     })
-
-    return user;
 }
 
 const userQuery = { getUserById, addUser, getUserByEmail };
