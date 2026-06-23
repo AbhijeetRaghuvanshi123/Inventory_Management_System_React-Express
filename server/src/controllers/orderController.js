@@ -3,7 +3,7 @@ import orderService from "../services/orderService.js";
 const createOrderPOST = async (req, res) => {
     try {
 
-        const order = await orderService.createOrder(
+        const order = await orderService.createOrderService(
             req.user.id,
             req.body.items
         );

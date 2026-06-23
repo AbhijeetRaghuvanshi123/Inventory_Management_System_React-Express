@@ -38,4 +38,31 @@ const getAllStockHistoryGET = async (req, res) => {
     }
 }
 
-export { getStockHistoryGET, getAllStockHistoryGET };
+const addProductStockGET = async (req, res) => {
+    try {
+    const { productId, quantity } = req.body;
+
+    if (!productId || !quantity) {
+      return res.status(400).json({
+        success: false,
+        message: "productId and quantity are required"
+      });
+    }
+
+    const result = await stockService.addStockService(productId, quantity);
+
+    res.status(200).json({
+      success: true,
+      message: "Stock added successfully",
+      data: result
+    });
+
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message
+    });
+  }
+}
+
+export { getStockHistoryGET, getAllStockHistoryGET, addProductStockGET };

@@ -1,6 +1,6 @@
 import dashboardService from "../services/dashboardService.js";
 
-const getDashboardGET = async () => {
+const getDashboardGET = async (req, res) => {
     try {
         const dashboard = await dashboardService.getDashboardService();
 

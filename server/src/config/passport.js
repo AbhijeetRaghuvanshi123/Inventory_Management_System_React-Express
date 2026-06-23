@@ -13,7 +13,7 @@ passport.use(new Strategy(
     },
     async (payload, done) => {
         try {
-            const user = userQuery.getUserById(payload.sub);
+            const user = await userQuery.getUserById(payload.sub);
 
             if(!user){
                 return done(null, false)

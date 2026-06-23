@@ -25,7 +25,7 @@ const deleteProductService = async (id) => {
         throw new Error("Product not found!");
     }
 
-    return await deleteProductQuery(id);
+    return await productQuery.deleteProduct(id);
 };
 
 const getAllProductsService = async () => {
@@ -38,7 +38,7 @@ const getAllProductsService = async () => {
     return products;
 }
 
-const getProductByIdService = async () => {
+const getProductByIdService = async (id) => {
     const product = await productQuery.getProductById(id);
 
     if(!product){

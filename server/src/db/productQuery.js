@@ -15,11 +15,14 @@ const getAllProducts = async () => {
 }
 
 const getProductById = async (id) => {
-    return await prisma.product.findUnique({
+    console.log(id);
+    const product = await prisma.product.findUnique({
         where: {
             id: id
         }
     })
+
+    return product;
 }
 
 const updateProduct = async (id, data) => {

@@ -1,3 +1,5 @@
+import { prisma } from "../../lib/prisma.js";
+
 const findProductById = async (id, tx) => {
     return await tx.product.findUnique({
         where: { id: id }
@@ -26,18 +28,18 @@ const decreaseStock = async (id, quantity, tx) => {
     });
 };
 
-const createStockMovement = async ( id, type, quantity, stockAfter, tx) => {
+const createStockMovement = async ( productId, type, quantity, stockAfter, tx) => {
     return await tx.stockMovement.create({
         data: {
-            id,
             type,
             quantity,
-            stockAfter
+            stockAfter,
+            productId
         }
     });
 };
 
-const getStockHistory = async (id, prisma) => {
+const getStockHistory = async (id) => {
     return prisma.stockMovement.findMany({
         where: {
             id: id
@@ -48,8 +50,8 @@ const getStockHistory = async (id, prisma) => {
     })
 }
 
-const getAllStockHistory = async (prisma) => {
-    return prisma.findMany({
+const getAllStockHistory = async () => {
+    return prisma.stockMovement.findMany({
         include: {
             product: true
         },

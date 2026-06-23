@@ -73,11 +73,11 @@ const getStockHistoryService = async (id) => {
         throw new Error("Product not found");
     }
 
-    return stockQuery.getStockHistory(id, prisma);
+    return stockQuery.getStockHistory(id);
 }
 
 const getAllStockHistoryService = async () => {
-    return stockQuery.getAllStockHistory(prisma);
+    return stockQuery.getAllStockHistory();
 }
 
 const stockService = { addStockService, reduceStockService, getStockHistoryService, getAllStockHistoryService };
