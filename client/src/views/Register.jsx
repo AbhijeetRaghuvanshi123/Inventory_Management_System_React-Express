@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import AuthLayout from "../components/AuthLayout";
+import { Link } from "react-router-dom";
 
 const RegisterPage = () => {
     const [email, setEmail] = useState("");
@@ -54,6 +55,13 @@ const RegisterPage = () => {
                     {loading ? "Creating account..." : "Register"}
                 </button>
             </form>
+
+            <p style={styles.linkText}>
+                Already have an account?{" "}
+                <Link to="/login" style={styles.link}>
+                    Login
+                </Link>
+            </p>
         </AuthLayout>
     );
 };
