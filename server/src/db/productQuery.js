@@ -15,7 +15,6 @@ const getAllProducts = async () => {
 }
 
 const getProductById = async (id) => {
-    console.log(id);
     const product = await prisma.product.findUnique({
         where: {
             id: id

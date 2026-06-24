@@ -45,4 +45,22 @@ const cancelOrderPATCH = async (req, res) => {
     }
 };
 
-export { createOrderPOST, cancelOrderPATCH };
+const getOrdersGET = async (req, res) => {
+    try {
+        const orders = await orderService.getOrdersService();
+
+        res.status(200).json({
+            success: true,
+            data: orders,
+        });
+    } catch (error) {
+        console.log(error);
+
+        res.status(500).json({
+            success: false,
+            message: error.message || "Failed to fetch orders",
+        });
+    }
+}
+
+export { createOrderPOST, cancelOrderPATCH , getOrdersGET};

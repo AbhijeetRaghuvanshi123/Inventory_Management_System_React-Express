@@ -97,6 +97,21 @@ export const cancelOrderService = async ( orderId) => {
   });
 };
 
-const orderService =  {createOrderService, cancelOrderService}
+const getOrdersService = async () => {
+  return prisma.order.findMany({
+    include: {
+      items: {
+        include: {
+          product: true, 
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+};
+
+const orderService =  {createOrderService, cancelOrderService, getOrdersService}
 
 export default orderService;

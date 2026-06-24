@@ -4,42 +4,63 @@ import { privateKey } from "../config/keys.js";
 import userQuery from "../db/userQuery.js";
 
 const registerUserPOST = async (req, res) => {
-    const { email, password } = req.body;
-    const hashedPassword = await genPassword(password);
+    try {
+        const { email, password } = req.body;
 
-    await userQuery.addUser(hashedPassword, email);
+        const hashedPassword = await genPassword(password);
 
-    res.status(201).json({
-        success: true,
-        message: "User Registered"
-    })
+        await userQuery.addUser(hashedPassword, email);
+
+        return res.status(201).json({
+            success: true,
+            message: "User Registered",
+        });
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            message: err.message || "Server error",
+        });
+    }
 };
 
 const loginUserPOST = async (req, res) => {
-    const { email, password } = req.body;
+    try {
+        const { email, password } = req.body;
 
-    const user = await userQuery.getUserByEmail(email);
+        const user = await userQuery.getUserByEmail(email);
 
-    if (!user) {
-        throw new Error('Invalid Credentials');
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                message: "Invalid Credentials",
+            });
+        }
+
+        const valid = await validPassword(password, user.password);
+
+        if (!valid) {
+            return res.status(401).json({
+                success: false,
+                message: "Invalid Password",
+            });
+        }
+
+        const token = genToken(user.id, user.email, privateKey);
+
+        return res.status(200).json({
+            success: true,
+            token,
+            user: {
+                id: user.id,
+                email: user.email,
+            },
+        });
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            message: err.message || "Server error",
+        });
     }
-
-    const valid = await validPassword(password, user.password);
-
-    if (!valid) {
-        throw new Error('Invalid Password!');
-    }
-
-    const token = genToken(user.id, user.email, privateKey);
-
-    res.status(200).json({
-        success: true,
-        token,
-        user: {
-            id: user.id,
-            email: user.email,
-        },
-    })
-}
+};
 
 export { registerUserPOST, loginUserPOST };

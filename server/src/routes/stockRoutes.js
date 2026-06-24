@@ -6,6 +6,6 @@ const stockRouter = Router();
 
 stockRouter.get('/history/:productId', ensureAuth, getStockHistoryGET);
 stockRouter.get('/history', ensureAuth,getAllStockHistoryGET);
-stockRouter.get('/add', ensureAuth,addProductStockGET);
+stockRouter.post('/add', ensureAuth,addProductStockGET);
 
 export default stockRouter;
