@@ -1,6 +1,6 @@
 import { prisma } from "../../lib/prisma.js";
 
-const createProduct = async ({sku, name}) => {
+const createProduct = async ({ sku, name }) => {
     return await prisma.product.create({
         data: {
             sku: sku,
@@ -34,13 +34,37 @@ const updateProduct = async (id, data) => {
 }
 
 const deleteProduct = async (id) => {
-    return await prisma.product.delete({
+    const orderItemCount = await prisma.orderItem.count({
         where: {
-            id: id
+            productId: id
         }
-    })
-}
+    });
 
-const productQuery = {createProduct, getAllProducts, getProductById, updateProduct, deleteProduct};
+    const movementCount = await prisma.stockMovement.count({
+        where: {
+            productId: id
+        }
+    });
+
+    if (orderItemCount > 0) {
+        throw new Error(
+            "Cannot delete product because it is referenced by existing orders."
+        );
+    }
+
+    if(movementCount > 0){
+        throw new Error(
+            "Cannot delete product because it is referenced by existing stock movements."
+        );
+    }
+
+    return prisma.product.delete({
+        where: {
+            id
+        }
+    });
+};
+
+const productQuery = { createProduct, getAllProducts, getProductById, updateProduct, deleteProduct };
 
 export default productQuery;
